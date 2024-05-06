@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% block title %}{{ item['title'] }}{% endblock %}</h2>
+<span class="badge badge-primary">{{ item['company'] }}</span>
+{% if item['status'] == 'выдан' %}
+    <span class="badge badge-success">выдан</span>
+    <p><h5>Товары были выданы {{ item['date'] }}</h5></p>
+{% else %}
+    <p>
+        <form method="POST">
+            <button type="submit" class="btn btn-primary btn-sm">Выдать товары по накладной</button>
+        </form>
+    </p>
+{% endif %}
+<hr>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Позиция</th>
+            <th scope="col">Единица измерения</th>
+            <th scope="col">Количество</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+{% endblock %}
