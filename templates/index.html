@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% block title %}Список накладных{% endblock %}
 {% block content %}
-<h1>{% block title %}Список накладных{% endblock %}</h1>
+<h1>Список накладных</h1>
 {% for item in items %}
 <a href="{{ url_for('item', item_id=item['id']) }}">
     <h2>{{ item['title'] }}</h2>
@@ -13,4 +14,5 @@
 {% endif %}
 <hr>
 {% endfor %}
+<a href="{{ url_for('create_invoice') }}" class="btn btn-primary">Создать новую накладную</a>
 {% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Создание новой накладной{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Создание новой накладной</h2>
+    <form method="POST" action="{{ url_for('create_invoice') }}">
+        <div class="form-group">
+            <label for="company">Грузополучатель:</label>
+            <select class="form-control" id="recipient" name="recipient" required>
+                {% for recipient in recipients %}
+                    <option value="{{ recipient['id'] }}">{{ recipient['name'] }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+
+        <div class="form-group">
+            <label for="status">Статус:</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="не выдана">Не выдана</option>
+                <option value="выдана">Выдана</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="product_count">Количество товаров:</label>
+            <input type="number" class="form-control" id="product_count" name="product_count" min="1" required>
+        </div>
+        <button type="button" id="submit_product_quantity" class="btn btn-primary">Указать количество товаров</button>
+        <hr>
+        <div id="products_table" style="display: none;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Товар</th>
+                        <th scope="col">Количество</th>
+                    </tr>
+                </thead>
+                <tbody id="products_body">
+                    <!-- Здесь будут добавлены строки товаров при указании количества -->
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать накладную</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('submit_product_quantity').addEventListener('click', function() {
+        var quantity = document.getElementById('product_count').value;
+        if (quantity > 0) {
+            document.getElementById('products_table').style.display = 'block';
+            generateProductRows(quantity);
+        }
+    });
+
+    function generateProductRows(quantity) {
+        var body = document.getElementById('products_body');
+        body.innerHTML = '';
+        for (var i = 0; i < quantity; i++) {
+            var row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <select name="product_${i}" class="form-control">
+                        {% for product in products %}
+                        <option value="{{ product['id'] }}">{{ product['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td><input type="number" name="quantity_${i}" class="form-control"></td>
+            `;
+            body.appendChild(row);
+        }
+    }
+</script>
+{% endblock %}
